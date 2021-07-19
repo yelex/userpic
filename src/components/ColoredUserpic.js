@@ -4,23 +4,31 @@ import '../index.css';
 function ColoredUserpic(props) {
 
     const [ isHover, setIsHover ] = React.useState(false);
-    const [ styleContainer, setStyleContainer ] = React.useState({
+    const [ styleOuterContainer, setStyleOuterContainer ] = React.useState({
         width: `${props.size}px`,
         height: `${props.size}px`,
-        borderWidth: `${props.colorWidth}px`,
-        borderStyle: 'solid',
-        borderImage: 'linear-gradient(to right, red, rgba(0, 0, 0, 0)) 1 100%', 
+        border: `double ${props.colorWidth}px transparent`,
         borderRadius: '50%',
         boxSizing: 'border-box',
-        padding: `${props.margin}px`,
-        background: `linear-gradient(${props.backgroundColor},${props.backgroundColor}) padding-box,
-                    linear-gradient(to right, ${props.colors[0]} , ${props.colors[1]})`,
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'content-box, border-box',
+        backgroundImage: `linear-gradient(white, white), linear-gradient(to right, ${props.colors[0]}, ${props.colors[1]})`,
+    });
+
+    const [ styleInnerContainer, setStyleInnerContainer ] = React.useState({
+        maxWidth: `100%`,
+        maxHeight: `100%`,
+        border: `solid ${props.margin}px red`,
+        borderRadius: '50%',
+        boxSizing: 'border-box',
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'content-box, border-box',
     });
 
     React.useEffect(()=>{
-        const styleContainerCopy = JSON.parse(JSON.stringify(styleContainer));
-        styleContainerCopy.background = isHover ? `linear-gradient(${props.backgroundColor},${props.backgroundColor}) padding-box, linear-gradient(to right, ${props.hoverColors[0]} , ${props.hoverColors[1]})` : `linear-gradient(${props.backgroundColor},${props.backgroundColor}) padding-box, linear-gradient(to right, ${props.colors[0]} , ${props.colors[1]})`;
-        setStyleContainer(styleContainerCopy);
+        const styleOuterContainerCopy = JSON.parse(JSON.stringify(styleOuterContainer));
+        styleOuterContainerCopy.backgroundImage = isHover ? `linear-gradient(white, white), linear-gradient(to right, ${props.hoverColors[0]}, ${props.hoverColors[1]})` : `linear-gradient(white, white), linear-gradient(to right, ${props.colors[0]}, ${props.colors[1]})`;
+        setStyleOuterContainer(styleOuterContainerCopy);
     }, [ isHover ]);
 
     function handleHover(){
@@ -28,15 +36,18 @@ function ColoredUserpic(props) {
     }
 
     return (
-        <div className="image__container" style={ styleContainer }>
-            <img className="image" 
-            alt={ 'avatar' } 
-            src={ props.src } 
-            style={{maxWidth: '100%',
-                maxHeight: '100%',
-                borderRadius: '50%'}}
-            onMouseOver={ handleHover }
-            onMouseOut={ handleHover }/>
+        <div className="image__container_type_outer" style={ styleOuterContainer }>
+            <div className="image__container_type_inner" style={ styleInnerContainer }>
+                <img className="image__pic" 
+                    alt={ 'avatar' } 
+                    src={ props.src } 
+                    style={{ maxWidth: '100%',
+                        maxHeight: '100%',
+                        borderRadius: '50%',
+                        objectFit: 'cover' }}
+                    onMouseOver={ handleHover }
+                    onMouseOut={ handleHover }/>
+            </div>
         </div>
     )
 }
