@@ -18,14 +18,12 @@ function ColoredUserpic(props) {
     });
 
     React.useEffect(()=>{
-        console.log('effect here') //success
         const styleContainerCopy = JSON.parse(JSON.stringify(styleContainer));
         styleContainerCopy.background = isHover ? `linear-gradient(${props.backgroundColor},${props.backgroundColor}) padding-box, linear-gradient(to right, ${props.hoverColors[0]} , ${props.hoverColors[1]})` : `linear-gradient(${props.backgroundColor},${props.backgroundColor}) padding-box, linear-gradient(to right, ${props.colors[0]} , ${props.colors[1]})`;
         setStyleContainer(styleContainerCopy);
     }, [ isHover ]);
 
     function handleHover(){
-        console.log('im here'); //success
         setIsHover(!isHover);
     }
 
